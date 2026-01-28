@@ -27,8 +27,8 @@ if (
     <meta name="csrf-token" content="<?php echo Csrf::generateToken(); ?>">
 
 
-    <link rel="stylesheet" href="/invoice_generator/public/css/style.css">
-    <script src="/invoice_generator/public/js/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="../../public/css/style.css">
+    <script src="../../public/js/sweetalert2.all.min.js"></script>
     <script>
         function confirmLogout(event) {
             event.preventDefault();

@@ -165,7 +165,7 @@ $conn->close();
 <title>Prime Invoice - Login/Register</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
+<link rel="stylesheet" href="public/css/style.css">
 
 <style>
 body { font-family: 'Inter', sans-serif; }

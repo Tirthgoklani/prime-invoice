@@ -7,7 +7,7 @@
     <!-- SweetAlert2 -->
     <!-- SweetAlert2 Loaded in Header -->
     <!-- Chart.js -->
-    <script src="/invoice_generator/public/js/chart.umd.min.js"></script>
+    <script src="../../public/js/chart.umd.min.js"></script>
 
 
     <script>
