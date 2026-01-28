@@ -42,7 +42,7 @@ if (
                 confirmButtonText: 'Yes, Logout'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = '/invoice_generator/logout.php';
+                    window.location.href = '../../logout.php';
                 }
             });
         }
@@ -158,7 +158,7 @@ if (
                     </li>
 
                     <li>
-                        <a href="/invoice_generator/logout.php" onclick="confirmLogout(event)" class="sidebar-link flex items-center gap-2 py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300" data-page="logout">
+                        <a href="../../logout.php" onclick="confirmLogout(event)" class="sidebar-link flex items-center gap-2 py-2 px-4 rounded-lg hover:bg-red-600 transition duration-300" data-page="logout">
                             🚪 <span>Logout</span>
                         </a>
                     </li>

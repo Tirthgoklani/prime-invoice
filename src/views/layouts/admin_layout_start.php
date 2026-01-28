@@ -90,7 +90,7 @@ if (!isset($_SESSION['admin_loggedin']) || $_SESSION['admin_loggedin'] !== true)
                 confirmButtonText: 'Yes, Logout'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = '/invoice_generator/logout.php';
+                    window.location.href = '../../logout.php';
                 }
             });
         }
