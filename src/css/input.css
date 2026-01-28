@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+@source "../../src/**/*.{php,html,js}";
+@source "../../index.php";
+
+@theme {
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}

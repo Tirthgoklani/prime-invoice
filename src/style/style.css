@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #F5F7FA; /* Light neutral background */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 31rem;
+            position: relative;
+            z-index: 10;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .tab {
+            transition: all 0.1s ease;
+        }
+        .tab.active {
+            background: #023B8C;
+            color: #ffffff;
+        }
+        .tab:not(.active) {
+            border: 2px solid #023B8C;
+        }
+        .input-field {
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            min-height: 48px;
+        }
+        .input-field:focus {
+            border-color: #00C6FF;
+            box-shadow: 0 0 0 3px rgba(0, 198, 255, 0.2);
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #023B8C 0%, #00C6FF 100%);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 198, 255, 0.3);
+        }
+        .error-message {
+            animation: fadeIn 0.5s ease-in;
+        }
+        .status-message {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* Specific styling for registration form */
+        #register-content .space-y-5 {
+            display: grid;
+            gap: 0.75rem; /* Reduced spacing */
+        }
+        #register-content .grid-cols-2 {
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        #register-content .input-field {
+            min-height: 42px; /* Slightly reduced height */
+        }
+        #register-content textarea.input-field {
+            min-height: 80px; /* Reduced height for textarea */
+            resize: vertical; /* Allow vertical resizing with a smaller initial size */
+            max-height: 120px; /* Limit max height to prevent excessive growth */
+        }
+        #register-content .text-center {
+            margin-top: 1rem; /* Reduced space before the button */
+        }
+        @media (max-width: 640px) {
+            #register-content .grid-cols-2 {
+                grid-template-columns: 1fr; /* Stack columns on mobile */
+            }
+        }
+        /* Minimalist background pattern */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(2, 59, 140, 0.02) 1%, transparent 1%) 0 0 / 50px 50px;
+            z-index: 1;
+        }

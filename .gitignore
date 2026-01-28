@@ -1,0 +1,19 @@
+# Config files with secrets
+config/config.php
+.env
+
+# User Uploads
+uploads/
+public/uploads/
+
+# Dependency directories
+node_modules/
+vendor/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
