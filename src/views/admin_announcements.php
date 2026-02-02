@@ -41,7 +41,10 @@ $announcements = $conn->query("SELECT * FROM announcements ORDER BY created_at D
     <h1 class="text-3xl font-bold mb-6">Manage Announcements</h1>
 
     <?php if (isset($success)): ?>
-        <div class="bg-green-500 text-white p-3 rounded mb-4"><?php echo $success; ?></div>
+        <div class="bg-green-900/50 border border-green-500 text-green-200 px-4 py-3 rounded relative mb-6" role="alert" data-auto-dismiss="true">
+            <strong class="font-bold">Success!</strong>
+            <span class="block sm:inline"><?php echo $success; ?></span>
+        </div>
     <?php endif; ?>
 
     <!-- Create Form -->

@@ -223,7 +223,7 @@ if (!$is_ajax) {
     <?php endif; ?>
 
     <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
-        <div class="bg-green-900/50 border border-green-500 text-green-200 px-4 py-3 rounded relative mb-6" role="alert">
+        <div class="bg-green-900/50 border border-green-500 text-green-200 px-4 py-3 rounded relative mb-6" role="alert" data-auto-dismiss="true">
             <strong class="font-bold">Success!</strong>
             <span class="block sm:inline">Invoice #<?php echo htmlspecialchars($_GET['invoice_id']); ?> created successfully.</span>
         </div>

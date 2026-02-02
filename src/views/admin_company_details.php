@@ -75,6 +75,17 @@ if (!$is_ajax) include __DIR__ . "/layouts/admin_layout_start.php";
 
 <div class="max-w-6xl mx-auto bg-gray-900 text-gray-100 p-8 rounded-lg shadow-xl">
 
+    <!-- Back Button -->
+    <div class="mb-4">
+        <button onclick="loadPage('admin_companies.php')" 
+            class="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Back to Companies
+        </button>
+    </div>
+
     <h1 class="text-4xl font-extrabold text-white mb-6 text-center">
         Company Details
     </h1>
@@ -141,7 +152,10 @@ if (!$is_ajax) include __DIR__ . "/layouts/admin_layout_start.php";
             <h3 class="text-2xl font-bold text-green-400 mb-4 text-center">
                 Monthly Invoice Trend
             </h3>
-            <canvas id="invoiceChart" class="h-80"></canvas>
+            <!-- FIXED HEIGHT CONTAINER FOR CHART.JS -->
+            <div class="relative w-full" style="height: 320px;">
+                <canvas id="invoiceChart"></canvas>
+            </div>
         </div>
 
         <!-- Customer Trend -->
@@ -149,7 +163,10 @@ if (!$is_ajax) include __DIR__ . "/layouts/admin_layout_start.php";
             <h3 class="text-2xl font-bold text-purple-400 mb-4 text-center">
                 Monthly Customer Growth
             </h3>
-            <canvas id="customerChart" class="h-80"></canvas>
+            <!-- FIXED HEIGHT CONTAINER FOR CHART.JS -->
+            <div class="relative w-full" style="height: 320px;">
+                <canvas id="customerChart"></canvas>
+            </div>
         </div>
 
     </div>
@@ -183,7 +200,7 @@ if (!$is_ajax) include __DIR__ . "/layouts/admin_layout_start.php";
     </div>
 </div>
 
-<script src="/invoice_generator/public/js/chart.umd.min.js"></script>
+<script src="../../public/js/chart.umd.min.js"></script>
 
 <script>
 (function() {
@@ -191,40 +208,92 @@ if (!$is_ajax) include __DIR__ . "/layouts/admin_layout_start.php";
     const invData = <?php echo json_encode($invoice_data); ?>;
     const cusData = <?php echo json_encode($customer_data); ?>;
 
-    Chart.defaults.color = '#e5e7eb';
-
-    // Invoice Chart
-    new Chart(document.getElementById("invoiceChart"), {
-        type: 'line',
-        data: {
-            labels,
-            datasets: [{
-                label: "Invoices",
-                data: invData,
-                borderColor: "rgb(52,211,153)",
-                backgroundColor: "rgba(52,211,153,0.2)",
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true
-            }]
+    function initCharts() {
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js not loaded');
+            return;
         }
-    });
 
-    // Customer Chart
-    new Chart(document.getElementById("customerChart"), {
-        type: 'bar',
-        data: {
-            labels,
-            datasets: [{
-                label: "New Customers",
-                data: cusData,
-                borderColor: "rgb(192,132,252)",
-                backgroundColor: "rgba(192,132,252,0.25)",
-                borderWidth: 2,
-                borderRadius: 6
-            }]
+        const invoiceCtx = document.getElementById('invoiceChart')?.getContext('2d');
+        const customerCtx = document.getElementById('customerChart')?.getContext('2d');
+
+        if (invoiceCtx) {
+            new Chart(invoiceCtx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Invoices",
+                        data: invData,
+                        borderColor: "rgb(52,211,153)",
+                        backgroundColor: "rgba(52,211,153,0.2)",
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#e5e7eb' } }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#9ca3af', stepSize: 1 }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#9ca3af' }
+                        }
+                    }
+                }
+            });
         }
-    });
+
+        if (customerCtx) {
+            new Chart(customerCtx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "New Customers",
+                        data: cusData,
+                        borderColor: "rgb(192,132,252)",
+                        backgroundColor: "rgba(192,132,252,0.25)",
+                        borderWidth: 2,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#e5e7eb' } }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#9ca3af', stepSize: 1 }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                            ticks: { color: '#9ca3af' }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCharts);
+    } else {
+        initCharts();
+    }
 })();
 
 // ACTIONS

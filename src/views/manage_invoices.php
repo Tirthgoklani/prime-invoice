@@ -87,17 +87,17 @@ if (!$is_ajax) {
         $invoice_id_msg = isset($_GET['invoice_id']) ? htmlspecialchars($_GET['invoice_id']) : '';
 
         if ($status == 'deleted') {
-            echo '<div class="bg-green-800 border border-green-500 text-green-100 px-4 py-3 rounded relative mb-6" role="alert">
+            echo '<div class="bg-green-900/50 border border-green-500 text-green-200 px-4 py-3 rounded relative mb-6" role="alert" data-auto-dismiss="true">
                     <strong class="font-bold">Success!</strong>
                     <span class="block sm:inline">Invoice #' . $invoice_id_msg . ' deleted successfully.</span>
                 </div>';
         } elseif ($status == 'updated') {
-            echo '<div class="bg-green-800 border border-green-500 text-green-100 px-4 py-3 rounded relative mb-6" role="alert">
+            echo '<div class="bg-green-900/50 border border-green-500 text-green-200 px-4 py-3 rounded relative mb-6" role="alert" data-auto-dismiss="true">
                     <strong class="font-bold">Success!</strong>
                     <span class="block sm:inline">Invoice #' . $invoice_id_msg . ' updated successfully.</span>
                 </div>';
         } elseif ($status == 'sent') {
-            echo '<div class="bg-green-800 border border-green-500 text-green-100 px-4 py-3 rounded relative mb-6" role="alert">
+            echo '<div class="bg-green-900/50 border border-green-500 text-green-200 px-4 py-3 rounded relative mb-6" role="alert" data-auto-dismiss="true">
                     <strong class="font-bold">Success!</strong>
                     <span class="block sm:inline">Invoice #' . $invoice_id_msg . ' has been emailed successfully.</span>
                 </div>';
@@ -121,12 +121,86 @@ if (!$is_ajax) {
             $error_message = 'An unknown error occurred.';
         }
 
-        echo '<div class="bg-red-800 border border-red-500 text-red-100 px-4 py-3 rounded relative mb-6" role="alert">
+        echo '<div class="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded relative mb-6" role="alert" data-auto-dismiss="true">
                 <strong class="font-bold">Error!</strong>
                 <span class="block sm:inline">' . $error_message . '</span>
             </div>';
     }
+    
+    // Export-related errors
+    if (isset($_GET['error'])) {
+        $error = $_GET['error'];
+        $error_message = '';
+        
+        if ($error === 'missing_dates') {
+            $error_message = 'Please select both start and end dates for export.';
+        } elseif ($error === 'no_invoices') {
+            $start = isset($_GET['start_date']) ? htmlspecialchars($_GET['start_date']) : '';
+            $end = isset($_GET['end_date']) ? htmlspecialchars($_GET['end_date']) : '';
+            $error_message = "No invoices found between $start and $end. Try a different date range.";
+        } elseif ($error === 'invalid_token') {
+            $error_message = 'Invalid security token. Please try again.';
+        }
+        
+        if ($error_message) {
+            echo '<div class="bg-yellow-900/50 border border-yellow-500 text-yellow-200 px-4 py-3 rounded relative mb-6" role="alert" data-auto-dismiss="true">
+                    <strong class="font-bold">Notice!</strong>
+                    <span class="block sm:inline">' . $error_message . '</span>
+                </div>';
+        }
+    }
     ?>
+
+    <!-- Export Invoices Section -->
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 mb-6">
+        <h2 class="text-2xl font-bold text-white mb-4 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Export Invoices
+        </h2>
+        
+        <form action="../controllers/export_invoices.php" method="POST" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+            <input type="hidden" name="csrf_token" value="<?php echo Csrf::generateToken(); ?>">
+            
+            <div>
+                <label for="start_date" class="block text-sm font-medium text-gray-300 mb-2">From Date</label>
+                <input type="date" id="start_date" name="start_date" 
+                       class="w-full p-3 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-white focus:ring-blue-500 focus:border-blue-500" 
+                       required>
+            </div>
+            
+            <div>
+                <label for="end_date" class="block text-sm font-medium text-gray-300 mb-2">To Date</label>
+                <input type="date" id="end_date" name="end_date" 
+                       class="w-full p-3 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-white focus:ring-blue-500 focus:border-blue-500" 
+                       required>
+            </div>
+            
+            <div>
+                <label for="format" class="block text-sm font-medium text-gray-300 mb-2">Format</label>
+                <select id="format" name="format" 
+                        class="w-full p-3 border border-gray-600 rounded-md shadow-sm bg-gray-700 text-white focus:ring-blue-500 focus:border-blue-500">
+                    <option value="excel">Excel (.csv)</option>
+                    <option value="pdf">PDF</option>
+                </select>
+            </div>
+            
+            <div>
+                <button type="submit" 
+                        class="w-full inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Export
+                </button>
+            </div>
+        </form>
+        
+        <p class="text-sm text-gray-400 mt-3">
+            💡 Export your invoice data for the selected date range. Excel format can be opened in Microsoft Excel or Google Sheets.
+        </p>
+    </div>
 
     <div class="mb-6 flex justify-between items-center">
         <form action="manage_invoices.php" method="GET" class="flex w-full md:w-1/2">
@@ -189,9 +263,9 @@ if (!$is_ajax) {
                                 <a href="edit_invoice.php?id=<?php echo $invoice['id']; ?>" class="text-indigo-400 hover:text-indigo-600 mr-3" title="Edit">
                                     ✏️
                                 </a>
-                                <a href="../controllers/send_invoice.php?id=<?php echo $invoice['id']; ?>" class="text-green-400 hover:text-green-600 mr-3" title="Send Mail">
+                                <button onclick="confirmSendEmail(<?php echo $invoice['id']; ?>, '<?php echo htmlspecialchars($invoice['invoice_number']); ?>')" class="text-green-400 hover:text-green-600 mr-3 bg-transparent border-0 cursor-pointer" title="Send Mail">
                                     ✉️
-                                </a>
+                                </button>
                                 <button onclick="confirmDeletion(<?php echo $invoice['id']; ?>, '<?php echo htmlspecialchars($invoice['invoice_number']); ?>')" class="text-red-400 hover:text-red-600" title="Delete">
                                     🗑️
                                 </button>
@@ -246,6 +320,29 @@ function confirmDeletion(invoiceId, invoiceNumber) {
         if (result.isConfirmed) {
             window.location.href = '../controllers/delete_invoice.php?id=' + invoiceId;
         }
+    });
+}
+
+function confirmSendEmail(invoiceId, invoiceNumber) {
+    Swal.fire({
+        title: 'Send Invoice Email?',
+        text: "Send Invoice #" + invoiceNumber + " to the client's email address?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#10b981',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Yes, send it!',
+        cancelButtonText: 'Cancel',
+        background: '#1f2937',
+        color: '#fff',
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+            // Use full page navigation to let the controller handle the redirect
+            window.location.href = '../controllers/send_invoice.php?id=' + invoiceId;
+            // Return a promise that never resolves to keep the loading state
+            return new Promise(() => {});
+        },
+        allowOutsideClick: () => !Swal.isLoading()
     });
 }
 </script>
