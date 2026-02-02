@@ -12,6 +12,12 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit();
 }
 
+// Check if request method is POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: ../views/manage_invoices.php?error=invalid_request");
+    exit();
+}
+
 // Validate CSRF token
 if (!isset($_POST['csrf_token']) || !Csrf::validateToken($_POST['csrf_token'])) {
     header("Location: ../views/manage_invoices.php?error=invalid_token");
