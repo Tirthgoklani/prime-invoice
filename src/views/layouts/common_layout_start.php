@@ -137,6 +137,11 @@ if (
                         </a>
                     </li>
                     <li>
+                        <a href="export_data.php" class="sidebar-link flex items-center gap-2 py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-300" data-page="export_data">
+                            📊 <span>Export Data</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="add_product.php" class="sidebar-link flex items-center gap-2 py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-300" data-page="add_product">
                             ➕ <span>Add Products</span>
                         </a>
