@@ -14,13 +14,13 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
 // Check if request method is POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: ../views/manage_invoices.php?error=invalid_request");
+    header("Location: ../views/export_data.php?error=invalid_request");
     exit();
 }
 
 // Validate CSRF token
 if (!isset($_POST['csrf_token']) || !Csrf::validateToken($_POST['csrf_token'])) {
-    header("Location: ../views/manage_invoices.php?error=invalid_token");
+    header("Location: ../views/export_data.php?error=invalid_token");
     exit();
 }
 
@@ -31,7 +31,7 @@ $format = isset($_POST['format']) ? $_POST['format'] : 'excel';
 
 // Validate dates
 if (empty($start_date) || empty($end_date)) {
-    header("Location: ../views/manage_invoices.php?error=missing_dates");
+    header("Location: ../views/export_data.php?error=missing_dates");
     exit();
 }
 
@@ -51,14 +51,21 @@ $stmt->close();
 
 // Check if any invoices found
 if (empty($invoices)) {
-    header("Location: ../views/manage_invoices.php?error=no_invoices&start_date=$start_date&end_date=$end_date");
+    header("Location: ../views/export_data.php?error=no_invoices&start_date=$start_date&end_date=$end_date");
     exit();
 }
 
-// Get company details
-$company_name = $_SESSION['company_name'];
-$company_email = $_SESSION['company_email'];
-$company_address = $_SESSION['company_address'];
+// Get company details from user_settings
+$stmt = $conn->prepare("SELECT company_name, company_email, company_address FROM user_settings WHERE user_id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$settings = $result->fetch_assoc();
+$stmt->close();
+
+$company_name = $settings['company_name'] ?? 'Your Company';
+$company_email = $settings['company_email'] ?? '';
+$company_address = $settings['company_address'] ?? '';
 
 if ($format === 'excel') {
     // Export as CSV (Excel-compatible)
