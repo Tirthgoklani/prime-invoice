@@ -1,5 +1,5 @@
 # Config files with secrets
-config/config.php
+# config/config.php
 .env
 
 # User Uploads
