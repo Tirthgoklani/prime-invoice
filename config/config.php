@@ -19,13 +19,13 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include CSRF Helper
 require_once __DIR__ . '/../src/classes/Csrf.php';
 // Define database parameters
-define('DB_SERVER', 'localhost'); // Your database server, usually 'localhost'
-define('DB_USERNAME', 'root');   // Your database username
-define('DB_PASSWORD', '');       // Your database password
-define('DB_NAME', 'invoice_app_db'); // The database name we created earlier
+define('DB_SERVER', 'sql113.infinityfree.comt'); // Your database server, usually 'localhost'
+define('DB_USERNAME', 'if0_41016906');   // Your database username
+define('DB_PASSWORD', 'MdHBI1C4sNrBu');       // Your database password
+define('DB_NAME', 'if0_41016906_primeinvoice'); // The database name we created earlier
 
 // Attempt to connect to MySQL database
-$conn = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, 3309);
+$conn = new mysqli(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
 // Check connection
 if ($conn->connect_error) {
