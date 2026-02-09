@@ -46,6 +46,8 @@ if (!$is_ajax) {
             $error_message = 'Failed to generate CSV export. Please try again or contact support.';
         } elseif ($error === 'pdf_failed') {
             $error_message = 'Failed to generate PDF export. Please try again or contact support.';
+        } elseif ($error === 'pdf_library_missing') {
+            $error_message = 'PDF export is currently unavailable. Please use CSV/Excel export instead.';
         }
         
         if ($error_message) {

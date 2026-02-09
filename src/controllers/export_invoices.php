@@ -6,10 +6,13 @@ error_reporting(E_ALL);
 
 require_once '../../config/config.php';
 
-// Dompdf for PDF generation
-require '../../includes/dompdf/vendor/autoload.php';
-use Dompdf\Dompdf;
-use Dompdf\Options;
+// Dompdf for PDF generation - only load if file exists
+$dompdf_available = file_exists('../../includes/dompdf/vendor/autoload.php');
+if ($dompdf_available) {
+    require '../../includes/dompdf/vendor/autoload.php';
+    use Dompdf\Dompdf;
+    use Dompdf\Options;
+}
 
 // Check if the user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
@@ -155,6 +158,13 @@ if ($format === 'excel') {
     }
     
 } elseif ($format === 'pdf') {
+    // Check if dompdf is available
+    if (!$dompdf_available) {
+        error_log("Export Error - Dompdf library not found on server");
+        header("Location: ../views/export_data.php?error=pdf_library_missing");
+        exit();
+    }
+    
     // Export as PDF
     try {
         $options = new Options();
