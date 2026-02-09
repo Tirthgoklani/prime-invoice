@@ -1,29 +1,52 @@
 <?php
-// Disable error display for production (errors are logged instead)
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
+// Enable error display for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once '../../config/config.php';
+// Log errors to file
+ini_set('log_errors', 1);
+ini_set('error_log', '../../logs/export_errors.log');
+
+try {
+    require_once '../../config/config.php';
+} catch (Exception $e) {
+    die("Config error: " . $e->getMessage());
+}
 
 // Check for Dompdf library - support both direct download and Composer installations
 $dompdf_direct = '../../includes/dompdf/autoload.inc.php';
 $dompdf_composer = '../../includes/dompdf/vendor/autoload.php';
 
+error_log("Checking for Dompdf at: " . realpath($dompdf_direct));
+error_log("Checking for Dompdf at: " . realpath($dompdf_composer));
+
 if (file_exists($dompdf_direct)) {
-    require $dompdf_direct;
-    $dompdf_available = true;
+    error_log("Loading Dompdf from: " . $dompdf_direct);
+    try {
+        require $dompdf_direct;
+        $dompdf_available = true;
+        error_log("Dompdf loaded successfully (direct)");
+    } catch (Exception $e) {
+        error_log("Dompdf load error (direct): " . $e->getMessage());
+        $dompdf_available = false;
+    }
 } elseif (file_exists($dompdf_composer)) {
-    require $dompdf_composer;
-    $dompdf_available = true;
+    error_log("Loading Dompdf from: " . $dompdf_composer);
+    try {
+        require $dompdf_composer;
+        $dompdf_available = true;
+        error_log("Dompdf loaded successfully (composer)");
+    } catch (Exception $e) {
+        error_log("Dompdf load error (composer): " . $e->getMessage());
+        $dompdf_available = false;
+    }
 } else {
+    error_log("Dompdf not found at either location");
     $dompdf_available = false;
 }
 
-// Use statements must be at top level (outside conditional)
-if ($dompdf_available) {
-    // Dompdf classes will be available after autoload
-}
+error_log("Dompdf available: " . ($dompdf_available ? 'YES' : 'NO'));
 
 // Check if the user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
