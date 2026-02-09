@@ -1,7 +1,7 @@
 <?php
-// Enable error display for debugging
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+// Disable error display for production
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
 error_reporting(E_ALL);
 
 // Log errors to file
@@ -11,42 +11,33 @@ ini_set('error_log', '../../logs/export_errors.log');
 try {
     require_once '../../config/config.php';
 } catch (Exception $e) {
-    die("Config error: " . $e->getMessage());
+    error_log("Config error: " . $e->getMessage());
+    die("Configuration error occurred.");
 }
 
 // Check for Dompdf library - support both direct download and Composer installations
 $dompdf_direct = '../../includes/dompdf/autoload.inc.php';
 $dompdf_composer = '../../includes/dompdf/vendor/autoload.php';
 
-error_log("Checking for Dompdf at: " . realpath($dompdf_direct));
-error_log("Checking for Dompdf at: " . realpath($dompdf_composer));
-
 if (file_exists($dompdf_direct)) {
-    error_log("Loading Dompdf from: " . $dompdf_direct);
     try {
         require $dompdf_direct;
         $dompdf_available = true;
-        error_log("Dompdf loaded successfully (direct)");
     } catch (Exception $e) {
         error_log("Dompdf load error (direct): " . $e->getMessage());
         $dompdf_available = false;
     }
 } elseif (file_exists($dompdf_composer)) {
-    error_log("Loading Dompdf from: " . $dompdf_composer);
     try {
         require $dompdf_composer;
         $dompdf_available = true;
-        error_log("Dompdf loaded successfully (composer)");
     } catch (Exception $e) {
         error_log("Dompdf load error (composer): " . $e->getMessage());
         $dompdf_available = false;
     }
 } else {
-    error_log("Dompdf not found at either location");
     $dompdf_available = false;
 }
-
-error_log("Dompdf available: " . ($dompdf_available ? 'YES' : 'NO'));
 
 // Check if the user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
@@ -252,6 +243,11 @@ if ($format === 'excel') {
         error_log("Export Error - Dompdf library not found on server");
         header("Location: ../views/export_data.php?error=pdf_library_missing");
         exit();
+    }
+    
+    // Clean any output buffers to prevent PDF corruption
+    if (ob_get_level()) {
+        ob_end_clean();
     }
     
     // Export as PDF
