@@ -9,6 +9,8 @@ public/uploads/
 # Dependency directories
 node_modules/
 vendor/
+# But allow Dompdf library
+!includes/dompdf/
 
 # System files
 .DS_Store
