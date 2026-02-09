@@ -114,14 +114,45 @@ if ($format === 'excel') {
     <style>
         body { font-family: Arial, sans-serif; }
         table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
-        .header-row { background-color: #2563eb; color: white; font-weight: bold; font-size: 14px; }
-        .company-header { background-color: #1e40af; color: white; font-size: 18px; font-weight: bold; padding: 15px; text-align: center; }
-        .subtitle { background-color: #3b82f6; color: white; font-size: 14px; padding: 10px; text-align: center; }
-        .date-range { background-color: #60a5fa; color: white; padding: 8px; text-align: center; }
-        .total-row { background-color: #f3f4f6; font-weight: bold; font-size: 13px; }
+        th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: center; }
+        .header-row { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+            font-weight: bold; 
+            font-size: 14px; 
+        }
+        .company-header { 
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+            color: white; 
+            font-size: 20px; 
+            font-weight: bold; 
+            padding: 18px; 
+            text-align: center; 
+        }
+        .subtitle { 
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
+            color: white; 
+            font-size: 15px; 
+            padding: 12px; 
+            text-align: center; 
+        }
+        .date-range { 
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); 
+            color: white; 
+            font-weight: 500;
+            padding: 10px; 
+            text-align: center; 
+        }
+        .total-row { 
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); 
+            color: #1f2937;
+            font-weight: bold; 
+            font-size: 13px; 
+        }
         .amount-cell { text-align: right; }
         .number-cell { text-align: center; }
+        tr:nth-child(even) { background-color: #f9fafb; }
+        tr:hover { background-color: #f3f4f6; }
     </style>
 </head>
 <body>
