@@ -52,9 +52,15 @@ if (!isset($_SESSION['admin_loggedin']) || $_SESSION['admin_loggedin'] !== true)
             margin-bottom: 6px;
             color: #cbd5e1;
             font-size: 16px;
+            transition: all 0.3s ease;
         }
         .sidebar-link:hover {
             background-color: #334155;
+        }
+        .sidebar-link.active {
+            background-color: #2563eb;
+            color: #ffffff;
+            font-weight: 600;
         }
         .logout-btn {
             margin-top: 25px;
@@ -94,6 +100,19 @@ if (!isset($_SESSION['admin_loggedin']) || $_SESSION['admin_loggedin'] !== true)
                 }
             });
         }
+
+        // Highlight active page in sidebar
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop();
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            
+            sidebarLinks.forEach(link => {
+                const linkPage = link.getAttribute('href').split('/').pop();
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
     </script>
 </head>
 

@@ -72,6 +72,8 @@ if (
         }
         .sidebar-link.active {
             background-color: #2563eb; /* Blue active */
+            color: #ffffff;
+            font-weight: 600;
         }
         aside {
             flex-shrink: 0;
@@ -100,6 +102,20 @@ if (
             visibility: visible !important;
         }
     </style>
+    <script>
+        // Highlight active page in sidebar
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop();
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            
+            sidebarLinks.forEach(link => {
+                const linkPage = link.getAttribute('href').split('/').pop();
+                if (linkPage === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 dark:text-gray-100">
 
