@@ -157,23 +157,24 @@ if ($format === 'excel') {
     </style>
 </head>
 <body>
-    <table>
+    <div style="overflow-x: auto;">
+    <table cellspacing="0" cellpadding="0">
         <tr><td colspan="10" class="company-header">' . htmlspecialchars($company_name) . '</td></tr>
         <tr><td colspan="10" class="subtitle">Invoice Export Report</td></tr>
         <tr><td colspan="10" class="date-range">Date Range: ' . date('M d, Y', strtotime($start_date)) . ' to ' . date('M d, Y', strtotime($end_date)) . '</td></tr>
         <tr><td colspan="10" style="height: 10px; border: none; background: none;"></td></tr>
         
         <tr class="header-row">
-            <th>Invoice Number</th>
-            <th>Invoice Date & Time</th>
-            <th>Due Date</th>
-            <th>Client Name</th>
-            <th>Client Email</th>
-            <th>Subtotal</th>
-            <th>Tax Rate (%)</th>
-            <th>Tax Amount</th>
-            <th>Discount</th>
-            <th>Total Amount</th>
+            <th style="white-space: nowrap;">Invoice Number</th>
+            <th style="white-space: nowrap;">Invoice Date & Time</th>
+            <th style="white-space: nowrap;">Due Date</th>
+            <th style="white-space: nowrap;">Client Name</th>
+            <th style="white-space: nowrap;">Client Email</th>
+            <th style="white-space: nowrap;">Subtotal</th>
+            <th style="white-space: nowrap;">Tax Rate (%)</th>
+            <th style="white-space: nowrap;">Tax Amount</th>
+            <th style="white-space: nowrap;">Discount</th>
+            <th style="white-space: nowrap;">Total Amount</th>
         </tr>';
         
         foreach ($invoices as $invoice) {
@@ -201,6 +202,7 @@ if ($format === 'excel') {
             <td class="number-cell">' . count($invoices) . '</td>
         </tr>
     </table>
+    </div>
 </body>
 </html>';
         
