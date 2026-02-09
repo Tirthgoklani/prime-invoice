@@ -106,7 +106,7 @@ if ($format === 'excel') {
             $total_sum += $invoice['total_amount'] ?? 0;
         }
         
-        // Build HTML table with styling
+        // Build HTML table with styling (11 columns now, removed Status)
         echo '<!DOCTYPE html>
 <html>
 <head>
@@ -120,19 +120,16 @@ if ($format === 'excel') {
         .subtitle { background-color: #3b82f6; color: white; font-size: 14px; padding: 10px; text-align: center; }
         .date-range { background-color: #60a5fa; color: white; padding: 8px; text-align: center; }
         .total-row { background-color: #f3f4f6; font-weight: bold; font-size: 13px; }
-        .status-paid { background-color: #d1fae5; color: #065f46; }
-        .status-pending { background-color: #fef3c7; color: #92400e; }
-        .status-overdue { background-color: #fee2e2; color: #991b1b; }
         .amount-cell { text-align: right; }
         .number-cell { text-align: center; }
     </style>
 </head>
 <body>
     <table>
-        <tr><td colspan="12" class="company-header">' . htmlspecialchars($company_name) . '</td></tr>
-        <tr><td colspan="12" class="subtitle">Invoice Export Report</td></tr>
-        <tr><td colspan="12" class="date-range">Date Range: ' . date('M d, Y', strtotime($start_date)) . ' to ' . date('M d, Y', strtotime($end_date)) . '</td></tr>
-        <tr><td colspan="12" style="height: 10px;"></td></tr>
+        <tr><td colspan="11" class="company-header">' . htmlspecialchars($company_name) . '</td></tr>
+        <tr><td colspan="11" class="subtitle">Invoice Export Report</td></tr>
+        <tr><td colspan="11" class="date-range">Date Range: ' . date('M d, Y', strtotime($start_date)) . ' to ' . date('M d, Y', strtotime($end_date)) . '</td></tr>
+        <tr><td colspan="11" style="height: 10px; border: none; background: none;"></td></tr>
         
         <tr class="header-row">
             <th>Invoice Number</th>
@@ -145,14 +142,10 @@ if ($format === 'excel') {
             <th>Tax Amount</th>
             <th>Discount</th>
             <th>Total Amount</th>
-            <th>Status</th>
             <th>Created At</th>
         </tr>';
         
         foreach ($invoices as $invoice) {
-            $status = strtolower($invoice['status'] ?? 'pending');
-            $status_class = 'status-' . $status;
-            
             echo '<tr>
                 <td class="number-cell">' . htmlspecialchars($invoice['invoice_number'] ?? '') . '</td>
                 <td>' . date('M d, Y', strtotime($invoice['invoice_date'] ?? 'now')) . '</td>
@@ -164,21 +157,20 @@ if ($format === 'excel') {
                 <td class="amount-cell">₹' . number_format($invoice['tax_amount'] ?? 0, 2) . '</td>
                 <td class="amount-cell">₹' . number_format($invoice['discount_amount'] ?? 0, 2) . '</td>
                 <td class="amount-cell">₹' . number_format($invoice['total_amount'] ?? 0, 2) . '</td>
-                <td class="' . $status_class . '">' . ucfirst($status) . '</td>
                 <td>' . date('M d, Y H:i', strtotime($invoice['created_at'] ?? 'now')) . '</td>
             </tr>';
         }
         
-        echo '<tr><td colspan="12" style="height: 10px;"></td></tr>
+        echo '<tr><td colspan="11" style="height: 10px; border: none; background: none;"></td></tr>
         <tr class="total-row">
             <td colspan="9" style="text-align: right; padding-right: 20px;">TOTAL:</td>
             <td class="amount-cell">₹' . number_format($total_sum, 2) . '</td>
-            <td colspan="2"></td>
+            <td></td>
         </tr>
         <tr class="total-row">
             <td colspan="9" style="text-align: right; padding-right: 20px;">Invoice Count:</td>
             <td class="number-cell">' . count($invoices) . '</td>
-            <td colspan="2"></td>
+            <td></td>
         </tr>
     </table>
 </body>
