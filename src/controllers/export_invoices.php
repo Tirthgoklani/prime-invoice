@@ -6,10 +6,18 @@ error_reporting(E_ALL);
 
 require_once '../../config/config.php';
 
-// Dompdf for PDF generation - only load if file exists
-$dompdf_available = file_exists('../../includes/dompdf/vendor/autoload.php');
-if ($dompdf_available) {
-    require '../../includes/dompdf/vendor/autoload.php';
+// Check for Dompdf library - support both direct download and Composer installations
+$dompdf_direct = '../../includes/dompdf/autoload.inc.php';
+$dompdf_composer = '../../includes/dompdf/vendor/autoload.php';
+
+if (file_exists($dompdf_direct)) {
+    require $dompdf_direct;
+    $dompdf_available = true;
+} elseif (file_exists($dompdf_composer)) {
+    require $dompdf_composer;
+    $dompdf_available = true;
+} else {
+    $dompdf_available = false;
 }
 
 // Use statements must be at top level (outside conditional)
