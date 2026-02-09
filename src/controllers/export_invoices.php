@@ -157,14 +157,14 @@ if ($format === 'excel') {
 </head>
 <body>
     <table>
-        <tr><td colspan="11" class="company-header">' . htmlspecialchars($company_name) . '</td></tr>
-        <tr><td colspan="11" class="subtitle">Invoice Export Report</td></tr>
-        <tr><td colspan="11" class="date-range">Date Range: ' . date('M d, Y', strtotime($start_date)) . ' to ' . date('M d, Y', strtotime($end_date)) . '</td></tr>
-        <tr><td colspan="11" style="height: 10px; border: none; background: none;"></td></tr>
+        <tr><td colspan="10" class="company-header">' . htmlspecialchars($company_name) . '</td></tr>
+        <tr><td colspan="10" class="subtitle">Invoice Export Report</td></tr>
+        <tr><td colspan="10" class="date-range">Date Range: ' . date('M d, Y', strtotime($start_date)) . ' to ' . date('M d, Y', strtotime($end_date)) . '</td></tr>
+        <tr><td colspan="10" style="height: 10px; border: none; background: none;"></td></tr>
         
         <tr class="header-row">
             <th>Invoice Number</th>
-            <th>Invoice Date</th>
+            <th>Invoice Date & Time</th>
             <th>Due Date</th>
             <th>Client Name</th>
             <th>Client Email</th>
@@ -173,13 +173,12 @@ if ($format === 'excel') {
             <th>Tax Amount</th>
             <th>Discount</th>
             <th>Total Amount</th>
-            <th>Created At</th>
         </tr>';
         
         foreach ($invoices as $invoice) {
             echo '<tr>
                 <td class="number-cell">' . htmlspecialchars($invoice['invoice_number'] ?? '') . '</td>
-                <td>' . date('M d, Y', strtotime($invoice['invoice_date'] ?? 'now')) . '</td>
+                <td>' . date('M d, Y H:i', strtotime($invoice['invoice_date'] ?? 'now')) . '</td>
                 <td>' . date('M d, Y', strtotime($invoice['due_date'] ?? 'now')) . '</td>
                 <td>' . htmlspecialchars($invoice['to_client_name'] ?? '') . '</td>
                 <td>' . htmlspecialchars($invoice['to_email'] ?? '') . '</td>
@@ -188,20 +187,17 @@ if ($format === 'excel') {
                 <td class="amount-cell">₹' . number_format($invoice['tax_amount'] ?? 0, 2) . '</td>
                 <td class="amount-cell">₹' . number_format($invoice['discount_amount'] ?? 0, 2) . '</td>
                 <td class="amount-cell">₹' . number_format($invoice['total_amount'] ?? 0, 2) . '</td>
-                <td>' . date('M d, Y H:i', strtotime($invoice['created_at'] ?? 'now')) . '</td>
             </tr>';
         }
         
-        echo '<tr><td colspan="11" style="height: 10px; border: none; background: none;"></td></tr>
+        echo '<tr><td colspan="10" style="height: 10px; border: none; background: none;"></td></tr>
         <tr class="total-row">
             <td colspan="9" style="text-align: right; padding-right: 20px;">TOTAL:</td>
             <td class="amount-cell">₹' . number_format($total_sum, 2) . '</td>
-            <td></td>
         </tr>
         <tr class="total-row">
             <td colspan="9" style="text-align: right; padding-right: 20px;">Invoice Count:</td>
             <td class="number-cell">' . count($invoices) . '</td>
-            <td></td>
         </tr>
     </table>
 </body>
