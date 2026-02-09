@@ -91,71 +91,102 @@ $company_email = $settings['company_email'] ?? '';
 $company_address = $settings['company_address'] ?? '';
 
 if ($format === 'excel') {
-    // Export as CSV (Excel-compatible)
+    // Export as styled Excel (HTML-based .xls that Excel can open)
     try {
-        $filename = "invoices_" . $start_date . "_to_" . $end_date . ".csv";
+        $filename = "invoices_" . $start_date . "_to_" . $end_date . ".xls";
         
-        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Type: application/vnd.ms-excel');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
         header('Pragma: no-cache');
         header('Expires: 0');
         
-        $output = fopen('php://output', 'w');
-        
-        // Add BOM for Excel UTF-8 compatibility
-        fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
-        
-        // Company header
-        fputcsv($output, [$company_name]);
-        fputcsv($output, ['Invoice Export Report']);
-        fputcsv($output, ['Date Range: ' . date('M d, Y', strtotime($start_date)) . ' to ' . date('M d, Y', strtotime($end_date))]);
-        fputcsv($output, []); // Empty row
-        
-        // Column headers
-        fputcsv($output, [
-            'Invoice Number',
-            'Invoice Date',
-            'Due Date',
-            'Client Name',
-            'Client Email',
-            'Subtotal',
-            'Tax Rate (%)',
-            'Tax Amount',
-            'Discount',
-            'Total Amount',
-            'Status',
-            'Created At'
-        ]);
-        
-        // Data rows
+        // Calculate total
         $total_sum = 0;
         foreach ($invoices as $invoice) {
-            fputcsv($output, [
-                $invoice['invoice_number'] ?? '',
-                date('M d, Y', strtotime($invoice['invoice_date'] ?? 'now')),
-                date('M d, Y', strtotime($invoice['due_date'] ?? 'now')),
-                $invoice['to_client_name'] ?? '',
-                $invoice['to_email'] ?? '',
-                '₹' . number_format($invoice['subtotal'] ?? 0, 2),
-                number_format($invoice['tax_rate'] ?? 0, 2),
-                '₹' . number_format($invoice['tax_amount'] ?? 0, 2),
-                '₹' . number_format($invoice['discount_amount'] ?? 0, 2),
-                '₹' . number_format($invoice['total_amount'] ?? 0, 2),
-                ucfirst($invoice['status'] ?? 'pending'),
-                date('M d, Y H:i', strtotime($invoice['created_at'] ?? 'now'))
-            ]);
-            $total_sum += $invoice['total_amount'];
+            $total_sum += $invoice['total_amount'] ?? 0;
         }
         
-        // Summary row
-        fputcsv($output, []); // Empty row
-        fputcsv($output, ['', '', '', '', '', '', '', '', 'TOTAL:', '₹' . number_format($total_sum, 2)]);
-        fputcsv($output, ['', '', '', '', '', '', '', '', 'Count:', count($invoices) . ' invoices']);
+        // Build HTML table with styling
+        echo '<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        .header-row { background-color: #2563eb; color: white; font-weight: bold; font-size: 14px; }
+        .company-header { background-color: #1e40af; color: white; font-size: 18px; font-weight: bold; padding: 15px; text-align: center; }
+        .subtitle { background-color: #3b82f6; color: white; font-size: 14px; padding: 10px; text-align: center; }
+        .date-range { background-color: #60a5fa; color: white; padding: 8px; text-align: center; }
+        .total-row { background-color: #f3f4f6; font-weight: bold; font-size: 13px; }
+        .status-paid { background-color: #d1fae5; color: #065f46; }
+        .status-pending { background-color: #fef3c7; color: #92400e; }
+        .status-overdue { background-color: #fee2e2; color: #991b1b; }
+        .amount-cell { text-align: right; }
+        .number-cell { text-align: center; }
+    </style>
+</head>
+<body>
+    <table>
+        <tr><td colspan="12" class="company-header">' . htmlspecialchars($company_name) . '</td></tr>
+        <tr><td colspan="12" class="subtitle">Invoice Export Report</td></tr>
+        <tr><td colspan="12" class="date-range">Date Range: ' . date('M d, Y', strtotime($start_date)) . ' to ' . date('M d, Y', strtotime($end_date)) . '</td></tr>
+        <tr><td colspan="12" style="height: 10px;"></td></tr>
         
-        fclose($output);
+        <tr class="header-row">
+            <th>Invoice Number</th>
+            <th>Invoice Date</th>
+            <th>Due Date</th>
+            <th>Client Name</th>
+            <th>Client Email</th>
+            <th>Subtotal</th>
+            <th>Tax Rate (%)</th>
+            <th>Tax Amount</th>
+            <th>Discount</th>
+            <th>Total Amount</th>
+            <th>Status</th>
+            <th>Created At</th>
+        </tr>';
+        
+        foreach ($invoices as $invoice) {
+            $status = strtolower($invoice['status'] ?? 'pending');
+            $status_class = 'status-' . $status;
+            
+            echo '<tr>
+                <td class="number-cell">' . htmlspecialchars($invoice['invoice_number'] ?? '') . '</td>
+                <td>' . date('M d, Y', strtotime($invoice['invoice_date'] ?? 'now')) . '</td>
+                <td>' . date('M d, Y', strtotime($invoice['due_date'] ?? 'now')) . '</td>
+                <td>' . htmlspecialchars($invoice['to_client_name'] ?? '') . '</td>
+                <td>' . htmlspecialchars($invoice['to_email'] ?? '') . '</td>
+                <td class="amount-cell">₹' . number_format($invoice['subtotal'] ?? 0, 2) . '</td>
+                <td class="number-cell">' . number_format($invoice['tax_rate'] ?? 0, 2) . '%</td>
+                <td class="amount-cell">₹' . number_format($invoice['tax_amount'] ?? 0, 2) . '</td>
+                <td class="amount-cell">₹' . number_format($invoice['discount_amount'] ?? 0, 2) . '</td>
+                <td class="amount-cell">₹' . number_format($invoice['total_amount'] ?? 0, 2) . '</td>
+                <td class="' . $status_class . '">' . ucfirst($status) . '</td>
+                <td>' . date('M d, Y H:i', strtotime($invoice['created_at'] ?? 'now')) . '</td>
+            </tr>';
+        }
+        
+        echo '<tr><td colspan="12" style="height: 10px;"></td></tr>
+        <tr class="total-row">
+            <td colspan="9" style="text-align: right; padding-right: 20px;">TOTAL:</td>
+            <td class="amount-cell">₹' . number_format($total_sum, 2) . '</td>
+            <td colspan="2"></td>
+        </tr>
+        <tr class="total-row">
+            <td colspan="9" style="text-align: right; padding-right: 20px;">Invoice Count:</td>
+            <td class="number-cell">' . count($invoices) . '</td>
+            <td colspan="2"></td>
+        </tr>
+    </table>
+</body>
+</html>';
+        
         exit();
     } catch (Exception $e) {
-        error_log("Export Error - CSV generation failed: " . $e->getMessage());
+        error_log("Export Error - Excel generation failed: " . $e->getMessage());
         header("Location: ../views/export_data.php?error=export_failed");
         exit();
     }
