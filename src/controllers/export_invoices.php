@@ -106,7 +106,7 @@ if ($format === 'excel') {
             $total_sum += $invoice['total_amount'] ?? 0;
         }
         
-        // Build HTML table with styling (11 columns now, removed Status)
+        // Build HTML table with styling (10 columns)
         echo '<!DOCTYPE html>
 <html>
 <head>
@@ -114,15 +114,15 @@ if ($format === 'excel') {
     <style>
         body { font-family: Arial, sans-serif; }
         table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #e5e7eb; padding: 12px; text-align: center; }
+        th, td { border: 1px solid #d1d5db; padding: 12px; text-align: center; }
         .header-row { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            background-color: #7c3aed; 
             color: white; 
             font-weight: bold; 
             font-size: 14px; 
         }
         .company-header { 
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+            background-color: #ec4899; 
             color: white; 
             font-size: 20px; 
             font-weight: bold; 
@@ -130,29 +130,28 @@ if ($format === 'excel') {
             text-align: center; 
         }
         .subtitle { 
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
+            background-color: #06b6d4; 
             color: white; 
             font-size: 15px; 
             padding: 12px; 
             text-align: center; 
         }
         .date-range { 
-            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); 
+            background-color: #10b981; 
             color: white; 
             font-weight: 500;
             padding: 10px; 
             text-align: center; 
         }
         .total-row { 
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); 
+            background-color: #fbbf24; 
             color: #1f2937;
             font-weight: bold; 
             font-size: 13px; 
         }
         .amount-cell { text-align: right; }
         .number-cell { text-align: center; }
-        tr:nth-child(even) { background-color: #f9fafb; }
-        tr:hover { background-color: #f3f4f6; }
+        .data-row:nth-child(even) { background-color: #f9fafb; }
     </style>
 </head>
 <body>
@@ -176,7 +175,7 @@ if ($format === 'excel') {
         </tr>';
         
         foreach ($invoices as $invoice) {
-            echo '<tr>
+            echo '<tr class="data-row">
                 <td class="number-cell">' . htmlspecialchars($invoice['invoice_number'] ?? '') . '</td>
                 <td>' . date('M d, Y H:i', strtotime($invoice['invoice_date'] ?? 'now')) . '</td>
                 <td>' . date('M d, Y', strtotime($invoice['due_date'] ?? 'now')) . '</td>
