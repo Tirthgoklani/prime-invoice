@@ -259,6 +259,7 @@ if ($format === 'excel') {
         $options = new \Dompdf\Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', true);
+        $options->set('defaultFont', 'DejaVu Sans');
         
         $dompdf = new \Dompdf\Dompdf($options);
         
@@ -267,9 +268,10 @@ if ($format === 'excel') {
         <html>
         <head>
             <meta charset="UTF-8">
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
             <style>
                 body {
-                    font-family: Arial, sans-serif;
+                    font-family: DejaVu Sans, Arial, sans-serif;
                     color: #333;
                     margin: 20px;
                 }
