@@ -113,14 +113,15 @@ if ($format === 'excel') {
     <meta charset="UTF-8">
     <style>
         body { font-family: Arial, sans-serif; }
-        table { border-collapse: collapse; width: 100%; }
+        table { border-collapse: collapse; }
         th, td { border: 1px solid #cbd5e1; padding: 12px; text-align: center; }
         
         /* Dark Blue for all headers - white text for visibility */
         .header-row, .company-header, .subtitle, .date-range { 
             background-color: #1e3a8a;
             color: white; 
-            font-weight: bold; 
+            font-weight: bold;
+            text-align: center;
         }
         
         .company-header { 
