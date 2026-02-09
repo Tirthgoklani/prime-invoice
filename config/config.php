@@ -19,7 +19,7 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include CSRF Helper
 require_once __DIR__ . '/../src/classes/Csrf.php';
 // Define database parameters
-define('DB_SERVER', 'sql113.infinityfree.comt'); // Your database server, usually 'localhost'
+define('DB_SERVER', 'sql113.infinityfree.com'); // Your database server, usually 'localhost'
 define('DB_USERNAME', 'if0_41016906');   // Your database username
 define('DB_PASSWORD', 'MdHBI1C4sNrBu');       // Your database password
 define('DB_NAME', 'if0_41016906_primeinvoice'); // The database name we created earlier

@@ -40,6 +40,12 @@ if (!$is_ajax) {
             $error_message = 'Invalid security token. Please try again.';
         } elseif ($error === 'invalid_request') {
             $error_message = 'Invalid request method. Please use the export form.';
+        } elseif ($error === 'database_error') {
+            $error_message = 'Database connection error. Please try again later or contact support.';
+        } elseif ($error === 'export_failed') {
+            $error_message = 'Failed to generate CSV export. Please try again or contact support.';
+        } elseif ($error === 'pdf_failed') {
+            $error_message = 'Failed to generate PDF export. Please try again or contact support.';
         }
         
         if ($error_message) {
