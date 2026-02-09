@@ -1,7 +1,7 @@
 <?php
-// Enable error display for debugging (remove after fixing)
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+// Disable error display for production (errors are logged instead)
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
 error_reporting(E_ALL);
 
 require_once '../../config/config.php';
@@ -131,18 +131,18 @@ if ($format === 'excel') {
         $total_sum = 0;
         foreach ($invoices as $invoice) {
             fputcsv($output, [
-                $invoice['invoice_number'],
-                date('M d, Y', strtotime($invoice['invoice_date'])),
-                date('M d, Y', strtotime($invoice['due_date'])),
-                $invoice['to_client_name'],
-                $invoice['to_email'],
-                '₹' . number_format($invoice['subtotal'], 2),
-                number_format($invoice['tax_rate'], 2),
-                '₹' . number_format($invoice['tax_amount'], 2),
-                '₹' . number_format($invoice['discount_amount'], 2),
-                '₹' . number_format($invoice['total_amount'], 2),
-                ucfirst($invoice['status']),
-                date('M d, Y H:i', strtotime($invoice['created_at']))
+                $invoice['invoice_number'] ?? '',
+                date('M d, Y', strtotime($invoice['invoice_date'] ?? 'now')),
+                date('M d, Y', strtotime($invoice['due_date'] ?? 'now')),
+                $invoice['to_client_name'] ?? '',
+                $invoice['to_email'] ?? '',
+                '₹' . number_format($invoice['subtotal'] ?? 0, 2),
+                number_format($invoice['tax_rate'] ?? 0, 2),
+                '₹' . number_format($invoice['tax_amount'] ?? 0, 2),
+                '₹' . number_format($invoice['discount_amount'] ?? 0, 2),
+                '₹' . number_format($invoice['total_amount'] ?? 0, 2),
+                ucfirst($invoice['status'] ?? 'pending'),
+                date('M d, Y H:i', strtotime($invoice['created_at'] ?? 'now'))
             ]);
             $total_sum += $invoice['total_amount'];
         }
