@@ -78,8 +78,8 @@ try {
     exit();
 }
 
-// Get company details from user_settings
-$stmt = $conn->prepare("SELECT company_name, company_email, company_address FROM user_settings WHERE user_id = ?");
+// Get company details from users table (not user_settings)
+$stmt = $conn->prepare("SELECT company_name, company_email, company_address FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
