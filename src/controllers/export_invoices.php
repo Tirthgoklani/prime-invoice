@@ -165,16 +165,16 @@ if ($format === 'excel') {
         <tr><td colspan="10" style="height: 10px; border: none; background: none;"></td></tr>
         
         <tr class="header-row">
-            <th style="white-space: nowrap;">Invoice Number</th>
-            <th style="white-space: nowrap;">Invoice Date & Time</th>
-            <th style="white-space: nowrap;">Due Date</th>
-            <th style="white-space: nowrap;">Client Name</th>
-            <th style="white-space: nowrap;">Client Email</th>
-            <th style="white-space: nowrap;">Subtotal</th>
-            <th style="white-space: nowrap;">Tax Rate (%)</th>
-            <th style="white-space: nowrap;">Tax Amount</th>
-            <th style="white-space: nowrap;">Discount</th>
-            <th style="white-space: nowrap;">Total Amount</th>
+            <td style="white-space: nowrap;">Invoice Number</td>
+            <td style="white-space: nowrap;">Invoice Date & Time</td>
+            <td style="white-space: nowrap;">Due Date</td>
+            <td style="white-space: nowrap;">Client Name</td>
+            <td style="white-space: nowrap;">Client Email</td>
+            <td style="white-space: nowrap;">Subtotal</td>
+            <td style="white-space: nowrap;">Tax Rate (%)</td>
+            <td style="white-space: nowrap;">Tax Amount</td>
+            <td style="white-space: nowrap;">Discount</td>
+            <td style="white-space: nowrap;">Total Amount</td>
         </tr>';
         
         foreach ($invoices as $invoice) {
