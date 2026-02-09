@@ -158,48 +158,49 @@ if ($format === 'excel') {
 </head>
 <body>
     <div style="overflow-x: auto;">
-    <table cellspacing="0" cellpadding="0">
-        <tr><td colspan="10" class="company-header">' . htmlspecialchars($company_name) . '</td></tr>
-        <tr><td colspan="10" class="subtitle">Invoice Export Report</td></tr>
-        <tr><td colspan="10" class="date-range">Date Range: ' . date('M d, Y', strtotime($start_date)) . ' to ' . date('M d, Y', strtotime($end_date)) . '</td></tr>
+    <table cellspacing="0" cellpadding="0" border="1" style="border-collapse: collapse;">
+        <tr><td colspan="10" style="background-color: #1e3a8a; color: white; font-size: 20px; font-weight: bold; padding: 18px; text-align: center; border: 1px solid #cbd5e1;">' . htmlspecialchars($company_name) . '</td></tr>
+        <tr><td colspan="10" style="background-color: #1e3a8a; color: white; font-size: 15px; font-weight: bold; padding: 12px; text-align: center; border: 1px solid #cbd5e1;">Invoice Export Report</td></tr>
+        <tr><td colspan="10" style="background-color: #1e3a8a; color: white; font-size: 14px; font-weight: bold; padding: 10px; text-align: center; border: 1px solid #cbd5e1;">Date Range: ' . date('M d, Y', strtotime($start_date)) . ' to ' . date('M d, Y', strtotime($end_date)) . '</td></tr>
         <tr><td colspan="10" style="height: 10px; border: none; background: none;"></td></tr>
         
-        <tr class="header-row">
-            <td style="white-space: nowrap;">Invoice Number</td>
-            <td style="white-space: nowrap;">Invoice Date & Time</td>
-            <td style="white-space: nowrap;">Due Date</td>
-            <td style="white-space: nowrap;">Client Name</td>
-            <td style="white-space: nowrap;">Client Email</td>
-            <td style="white-space: nowrap;">Subtotal</td>
-            <td style="white-space: nowrap;">Tax Rate (%)</td>
-            <td style="white-space: nowrap;">Tax Amount</td>
-            <td style="white-space: nowrap;">Discount</td>
-            <td style="white-space: nowrap;">Total Amount</td>
+        <tr>
+            <td style="background-color: #1e3a8a; color: white; font-weight: bold; font-size: 14px; padding: 12px; text-align: center; border: 1px solid #cbd5e1; white-space: nowrap;">Invoice Number</td>
+            <td style="background-color: #1e3a8a; color: white; font-weight: bold; font-size: 14px; padding: 12px; text-align: center; border: 1px solid #cbd5e1; white-space: nowrap;">Invoice Date & Time</td>
+            <td style="background-color: #1e3a8a; color: white; font-weight: bold; font-size: 14px; padding: 12px; text-align: center; border: 1px solid #cbd5e1; white-space: nowrap;">Due Date</td>
+            <td style="background-color: #1e3a8a; color: white; font-weight: bold; font-size: 14px; padding: 12px; text-align: center; border: 1px solid #cbd5e1; white-space: nowrap;">Client Name</td>
+            <td style="background-color: #1e3a8a; color: white; font-weight: bold; font-size: 14px; padding: 12px; text-align: center; border: 1px solid #cbd5e1; white-space: nowrap;">Client Email</td>
+            <td style="background-color: #1e3a8a; color: white; font-weight: bold; font-size: 14px; padding: 12px; text-align: center; border: 1px solid #cbd5e1; white-space: nowrap;">Subtotal</td>
+            <td style="background-color: #1e3a8a; color: white; font-weight: bold; font-size: 14px; padding: 12px; text-align: center; border: 1px solid #cbd5e1; white-space: nowrap;">Tax Rate (%)</td>
+            <td style="background-color: #1e3a8a; color: white; font-weight: bold; font-size: 14px; padding: 12px; text-align: center; border: 1px solid #cbd5e1; white-space: nowrap;">Tax Amount</td>
+            <td style="background-color: #1e3a8a; color: white; font-weight: bold; font-size: 14px; padding: 12px; text-align: center; border: 1px solid #cbd5e1; white-space: nowrap;">Discount</td>
+            <td style="background-color: #1e3a8a; color: white; font-weight: bold; font-size: 14px; padding: 12px; text-align: center; border: 1px solid #cbd5e1; white-space: nowrap;">Total Amount</td>
         </tr>';
         
         foreach ($invoices as $invoice) {
-            echo '<tr class="data-row">
-                <td class="number-cell">' . htmlspecialchars($invoice['invoice_number'] ?? '') . '</td>
-                <td>' . date('M d, Y H:i', strtotime($invoice['invoice_date'] ?? 'now')) . '</td>
-                <td>' . date('M d, Y', strtotime($invoice['due_date'] ?? 'now')) . '</td>
-                <td>' . htmlspecialchars($invoice['to_client_name'] ?? '') . '</td>
-                <td>' . htmlspecialchars($invoice['to_email'] ?? '') . '</td>
-                <td class="amount-cell">₹' . number_format($invoice['subtotal'] ?? 0, 2) . '</td>
-                <td class="number-cell">' . number_format($invoice['tax_rate'] ?? 0, 2) . '%</td>
-                <td class="amount-cell">₹' . number_format($invoice['tax_amount'] ?? 0, 2) . '</td>
-                <td class="amount-cell">₹' . number_format($invoice['discount_amount'] ?? 0, 2) . '</td>
-                <td class="amount-cell">₹' . number_format($invoice['total_amount'] ?? 0, 2) . '</td>
+            $rowStyle = 'border: 1px solid #cbd5e1; padding: 12px; text-align: center;';
+            echo '<tr>
+                <td style="' . $rowStyle . ' text-align: center;">' . htmlspecialchars($invoice['invoice_number'] ?? '') . '</td>
+                <td style="' . $rowStyle . '">' . date('M d, Y H:i', strtotime($invoice['invoice_date'] ?? 'now')) . '</td>
+                <td style="' . $rowStyle . '">' . date('M d, Y', strtotime($invoice['due_date'] ?? 'now')) . '</td>
+                <td style="' . $rowStyle . '">' . htmlspecialchars($invoice['to_client_name'] ?? '') . '</td>
+                <td style="' . $rowStyle . '">' . htmlspecialchars($invoice['to_email'] ?? '') . '</td>
+                <td style="' . $rowStyle . ' text-align: right;">₹' . number_format($invoice['subtotal'] ?? 0, 2) . '</td>
+                <td style="' . $rowStyle . ' text-align: center;">' . number_format($invoice['tax_rate'] ?? 0, 2) . '%</td>
+                <td style="' . $rowStyle . ' text-align: right;">₹' . number_format($invoice['tax_amount'] ?? 0, 2) . '</td>
+                <td style="' . $rowStyle . ' text-align: right;">₹' . number_format($invoice['discount_amount'] ?? 0, 2) . '</td>
+                <td style="' . $rowStyle . ' text-align: right;">₹' . number_format($invoice['total_amount'] ?? 0, 2) . '</td>
             </tr>';
         }
         
         echo '<tr><td colspan="10" style="height: 10px; border: none; background: none;"></td></tr>
-        <tr class="total-row">
-            <td colspan="9" style="text-align: right; padding-right: 20px;">TOTAL:</td>
-            <td class="amount-cell">₹' . number_format($total_sum, 2) . '</td>
+        <tr>
+            <td colspan="9" style="background-color: #dbeafe; color: #1e3a8a; font-weight: bold; font-size: 13px; text-align: right; padding: 12px 20px 12px 12px; border: 1px solid #cbd5e1;">TOTAL:</td>
+            <td style="background-color: #dbeafe; color: #1e3a8a; font-weight: bold; font-size: 13px; text-align: right; padding: 12px; border: 1px solid #cbd5e1;">₹' . number_format($total_sum, 2) . '</td>
         </tr>
-        <tr class="total-row">
-            <td colspan="9" style="text-align: right; padding-right: 20px;">Invoice Count:</td>
-            <td class="number-cell">' . count($invoices) . '</td>
+        <tr>
+            <td colspan="9" style="background-color: #dbeafe; color: #1e3a8a; font-weight: bold; font-size: 13px; text-align: right; padding: 12px 20px 12px 12px; border: 1px solid #cbd5e1;">Invoice Count:</td>
+            <td style="background-color: #dbeafe; color: #1e3a8a; font-weight: bold; font-size: 13px; text-align: center; padding: 12px; border: 1px solid #cbd5e1;">' . count($invoices) . '</td>
         </tr>
     </table>
     </div>
