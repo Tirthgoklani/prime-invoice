@@ -422,8 +422,8 @@ if ($format === 'excel') {
         $dompdf->setPaper('A4', 'landscape');
         $dompdf->render();
         
-        $filename = "invoices_" . $start_date . "_to_" . $end_date . ".pdf";
-        $dompdf->stream($filename, array("Attachment" => true));
+        // Output PDF
+        $dompdf->stream('invoice_export_' . date('Y-m-d') . '.pdf', ['Attachment' => true]);
         exit();
     } catch (Exception $e) {
         error_log("Export Error - PDF generation failed: " . $e->getMessage());
