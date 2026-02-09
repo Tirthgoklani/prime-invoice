@@ -10,8 +10,11 @@ require_once '../../config/config.php';
 $dompdf_available = file_exists('../../includes/dompdf/vendor/autoload.php');
 if ($dompdf_available) {
     require '../../includes/dompdf/vendor/autoload.php';
-    use Dompdf\Dompdf;
-    use Dompdf\Options;
+}
+
+// Use statements must be at top level (outside conditional)
+if ($dompdf_available) {
+    // Dompdf classes will be available after autoload
 }
 
 // Check if the user is logged in
@@ -167,11 +170,11 @@ if ($format === 'excel') {
     
     // Export as PDF
     try {
-        $options = new Options();
+        $options = new \Dompdf\Options();
         $options->set('isHtml5ParserEnabled', true);
         $options->set('isRemoteEnabled', true);
         
-        $dompdf = new Dompdf($options);
+        $dompdf = new \Dompdf\Dompdf($options);
         
         // Build HTML for PDF
         $html = '<!DOCTYPE html>
