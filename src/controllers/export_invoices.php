@@ -142,8 +142,9 @@ if ($format === 'excel') {
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
-        body { font-family: Arial, sans-serif; }
+        body { font-family: DejaVu Sans, Arial, sans-serif; }
         table { border-collapse: collapse; }
         th, td { border: 1px solid #cbd5e1; padding: 12px; text-align: center; }
         
