@@ -114,44 +114,45 @@ if ($format === 'excel') {
     <style>
         body { font-family: Arial, sans-serif; }
         table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #d1d5db; padding: 12px; text-align: center; }
-        .header-row { 
-            background-color: #7c3aed; 
+        th, td { border: 1px solid #cbd5e1; padding: 12px; text-align: center; }
+        
+        /* Dark Blue for all headers - white text for visibility */
+        .header-row, .company-header, .subtitle, .date-range { 
+            background-color: #1e3a8a;
             color: white; 
             font-weight: bold; 
-            font-size: 14px; 
         }
+        
         .company-header { 
-            background-color: #ec4899; 
-            color: white; 
             font-size: 20px; 
-            font-weight: bold; 
             padding: 18px; 
-            text-align: center; 
         }
+        
         .subtitle { 
-            background-color: #06b6d4; 
-            color: white; 
             font-size: 15px; 
             padding: 12px; 
-            text-align: center; 
         }
+        
         .date-range { 
-            background-color: #10b981; 
-            color: white; 
-            font-weight: 500;
+            font-size: 14px;
             padding: 10px; 
-            text-align: center; 
         }
+        
+        .header-row {
+            font-size: 14px;
+        }
+        
+        /* Light Blue for totals - dark text for visibility */
         .total-row { 
-            background-color: #fbbf24; 
-            color: #1f2937;
+            background-color: #dbeafe;
+            color: #1e3a8a;
             font-weight: bold; 
             font-size: 13px; 
         }
+        
         .amount-cell { text-align: right; }
         .number-cell { text-align: center; }
-        .data-row:nth-child(even) { background-color: #f9fafb; }
+        .data-row:nth-child(even) { background-color: #f8fafc; }
     </style>
 </head>
 <body>
