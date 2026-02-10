@@ -1,6 +1,5 @@
 <?php
-// src/views/partials/admin_ticket_list.php
-// Expects $tickets result object from the parent script
+// expects $tickets from parent
 
 while ($row = $tickets->fetch_assoc()): ?>
     <div class="bg-gray-800 p-4 rounded border border-gray-700">

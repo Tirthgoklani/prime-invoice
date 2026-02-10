@@ -1,5 +1,4 @@
 <?php
-// src/classes/Csrf.php
 
 class Csrf {
     

@@ -1,6 +1,5 @@
 <?php
-// src/views/partials/ticket_replies_list.php
-// Expects $replies result object from the parent script
+// expects $replies from parent
 
 while ($rep = $replies->fetch_assoc()): ?>
     <div class="flex flex-col <?php echo $rep['sender_type'] === 'user' ? 'items-end' : 'items-start'; ?>">
