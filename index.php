@@ -1,12 +1,10 @@
 <?php
-// index.php
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 require_once __DIR__ . '/config/config.php';
 
-// Function to sanitize input
 function sanitize_input($data) {
     return htmlspecialchars(stripslashes(trim($data)));
 }
@@ -15,24 +13,19 @@ $login_error_message = '';
 $register_status_message = '';
 $register_error_message = '';
 
-// Determine form type
 $form_type = $_POST['form_type'] ?? 'login';
 
-// Check Registration Setting
-$allow_registration = 1; // Default
+// check registration setting
+$allow_registration = 1;
 $set_res = $conn->query("SELECT allow_registration FROM platform_settings LIMIT 1");
-if ($set_res && $set_res->num_rows > 0) {
+if($set_res && $set_res->num_rows > 0) {
     $allow_registration = (int)$set_res->fetch_assoc()['allow_registration'];
 }
 
+// login handler
+if($_SERVER["REQUEST_METHOD"] == "POST" && $form_type === 'login') {
 
-// ===============================================
-// 1️⃣ UNIFIED LOGIN HANDLER (ADMIN + USER)
-// ===============================================
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && $form_type === 'login') {
-
-    if (!Csrf::validateToken($_POST['csrf_token'] ?? '')) {
+    if(!Csrf::validateToken($_POST['csrf_token'] ?? '')) {
         $login_error_message = "Invalid request token. Please refresh the page.";
     } else {
 
@@ -40,14 +33,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $form_type === 'login') {
     $input_identifier = sanitize_input($_POST['username']);
     $input_password   = $_POST['password'];
 
-    // ---- A. CHECK ADMIN LOGIN ----
+    // check admin login
     $admin_sql = "SELECT id, admin_email, admin_password_hash FROM admin WHERE admin_email = ?";
     $stmt = $conn->prepare($admin_sql);
     $stmt->bind_param("s", $input_identifier);
     $stmt->execute();
     $admin = $stmt->get_result()->fetch_assoc();
 
-    if ($admin && password_verify($input_password, $admin['admin_password_hash'])) {
+    if($admin && password_verify($input_password, $admin['admin_password_hash'])) {
 
         $_SESSION['admin_loggedin'] = true;
         $_SESSION['admin_id'] = $admin['id'];
@@ -60,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $form_type === 'login') {
         exit();
     }
 
-    // ---- B. CHECK NORMAL USER LOGIN ----
+    // check user login
     $user_sql = "SELECT id, username, password_hash, company_name, company_address, company_email 
                  FROM users WHERE username = ?";
     $stmt = $conn->prepare($user_sql);
@@ -68,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $form_type === 'login') {
     $stmt->execute();
     $user = $stmt->get_result()->fetch_assoc();
 
-    if ($user && password_verify($input_password, $user['password_hash'])) {
+    if($user && password_verify($input_password, $user['password_hash'])) {
 
         $_SESSION['loggedin'] = true;
         $_SESSION['user_id'] = $user['id'];
@@ -83,20 +76,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $form_type === 'login') {
         exit();
     }
 
-    // If neither matched → show error
     $login_error_message = "Invalid username/email or password.";
     }
 }
 
+// registration handler
+if($_SERVER["REQUEST_METHOD"] == "POST" && $form_type === 'register') {
 
-
-// ===============================================
-// 2️⃣ COMPANY REGISTRATION HANDLER
-// ===============================================
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && $form_type === 'register') {
-
-    if (!Csrf::validateToken($_POST['csrf_token'] ?? '')) {
+    if(!Csrf::validateToken($_POST['csrf_token'] ?? '')) {
         $register_error_message = "Invalid request token. Please refresh the page.";
     } else {
 
@@ -109,34 +96,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $form_type === 'register') {
 
     $hashed_password = password_hash($input_password, PASSWORD_DEFAULT);
 
-    // Check username
+    // check username
     $stmt = $conn->prepare("SELECT id FROM users WHERE username=?");
     $stmt->bind_param("s", $input_username);
     $stmt->execute();
     $stmt->store_result();
 
-    if ($stmt->num_rows > 0) {
+    if($stmt->num_rows > 0) {
         $register_error_message = 'Username already taken.';
     } else {
 
-        // Check email
+        // check email
         $stmt2 = $conn->prepare("SELECT id FROM users WHERE company_email=?");
         $stmt2->bind_param("s", $company_email);
         $stmt2->execute();
         $stmt2->store_result();
 
-        if ($stmt2->num_rows > 0) {
+        if($stmt2->num_rows > 0) {
             $register_error_message = 'Email already registered.';
         } else {
 
-            // Insert new user
             $stmt3 = $conn->prepare("INSERT INTO users 
                 (username, password_hash, company_name, company_address, company_email)
                 VALUES (?, ?, ?, ?, ?)");
             $stmt3->bind_param("sssss", $input_username, $hashed_password, 
                                $company_name, $company_address, $company_email);
 
-            if ($stmt3->execute()) {
+            if($stmt3->execute()) {
                 $new_user_id = $stmt3->insert_id;
                 log_activity($new_user_id, 'REGISTER', "New company registered: $company_name");
 
