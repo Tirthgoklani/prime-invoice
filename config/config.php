@@ -62,11 +62,10 @@ $allowed_pages = [
     'check_maintenance_status.php'
 ];
 
-// Skip check if Admin is logged in or if page is allowed
+// skip check only if admin logged in or page is allowed
 if (!isset($_SESSION['admin_loggedin']) && !in_array($current_script, $allowed_pages)) {
     
-    // Check DB for maintenance setting
-    // Use try-catch to avoid crashing if table missing (though it handles silently mostly)
+    // check maintenance mode
     $is_maintenance = false;
     try {
         $m_sql = "SELECT setting_value FROM system_settings WHERE setting_key = 'maintenance_mode'";
@@ -74,14 +73,18 @@ if (!isset($_SESSION['admin_loggedin']) && !in_array($current_script, $allowed_p
         if ($m_result && $m_result->num_rows > 0) {
             $is_maintenance = (bool)$m_result->fetch_assoc()['setting_value'];
         }
-    } catch (Exception $e) { /* Ignore */ }
+    } catch (Exception $e) { /* ignore */ }
 
     if ($is_maintenance) {
-        // Determine path relative to current script
-        // Fallback absolute path if unsure
+        // logout regular users
+        if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
+            session_destroy();
+            session_start();
+        }
+        
+        // determine path
         $redirect_path = '/invoice_generator/src/views/maintenance.php';
         
-        // Try relative paths based on common locations
         if (file_exists('src/views/maintenance.php')) {
             $redirect_path = 'src/views/maintenance.php';
         } elseif (file_exists('../views/maintenance.php')) {
