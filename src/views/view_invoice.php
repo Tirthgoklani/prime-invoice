@@ -119,7 +119,6 @@ if (!$is_ajax) {
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         <div>
-        <div>
             <h2 class="text-xl font-semibold mb-2" style="color: <?php echo htmlspecialchars($theme_color); ?>;">Bill From:</h2>
             <p class="text-white font-bold"><?php echo htmlspecialchars($invoice_data['from_company_name']); ?></p>
             <p class="text-gray-300"><?php echo nl2br(htmlspecialchars($invoice_data['from_address'])); ?></p>
