@@ -55,6 +55,11 @@ if (
             display: flex;
             min-height: 100vh;
             overflow: hidden;
+            opacity: 1;
+        }
+        /* prevent flash during maintenance redirect */
+        body.checking-maintenance {
+            opacity: 0;
         }
         ::-webkit-scrollbar {
             width: 8px;
@@ -117,7 +122,13 @@ if (
         });
     </script>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 dark:text-gray-100">
+<body class="bg-gray-100 dark:bg-gray-900 dark:text-gray-100 checking-maintenance">
+<script>
+// show body after page loads (maintenance check already done in config.php)
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.remove('checking-maintenance');
+});
+</script>
 
 <?php if (isset($_SESSION['is_impersonating']) && $_SESSION['is_impersonating'] === true): ?>
 <div class="bg-purple-600 text-white text-center py-2 font-bold fixed top-0 w-full z-50 shadow-lg">
