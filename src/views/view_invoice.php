@@ -225,7 +225,7 @@ if (!$is_ajax) {
         box-shadow: none !important;
         margin: 0 !important;
         max-width: 100% !important;
-        padding: 5/ !important;
+        padding: 20px !important;
     }
     table, th, td {
         border-color: #fff !important;

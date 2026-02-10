@@ -59,7 +59,7 @@ if (!$is_ajax) {
     }
     ?>
 
-    <form action="process_edit_product.php" method="POST" class="space-y-6">
+    <form action="../controllers/process_edit_product.php" method="POST" class="space-y-6">
         <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
 
         <div>
