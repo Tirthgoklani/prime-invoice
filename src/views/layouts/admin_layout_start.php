@@ -15,6 +15,7 @@ if (!isset($_SESSION['admin_loggedin']) || $_SESSION['admin_loggedin'] !== true)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Prime Invoice</title>
+    <link rel="icon" type="image/png" href="../../logo.png">
     <meta name="csrf-token" content="<?php echo Csrf::generateToken(); ?>">
 
     <link rel="stylesheet" href="../../public/css/style.css">
