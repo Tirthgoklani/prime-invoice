@@ -119,6 +119,20 @@ if (
                     link.classList.add('active');
                 }
             });
+            
+            // poll for maintenance mode (only for non-admin users)
+            <?php if(!isset($_SESSION['admin_loggedin']) || $_SESSION['admin_loggedin'] !== true): ?>
+            setInterval(function() {
+                fetch('check_maintenance_status.php')
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.maintenance) {
+                            window.location.href = 'maintenance.php';
+                        }
+                    })
+                    .catch(err => console.log('Maintenance check failed'));
+            }, 5000); // check every 5 seconds
+            <?php endif; ?>
         });
     </script>
 </head>
