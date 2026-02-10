@@ -228,7 +228,21 @@ function updatePassword() {
         body: formData
     })
         .then(res => res.text())
-        .then(result => Swal.fire({ icon: result.includes('Success') ? 'success' : 'error', title: 'Status', text: result, background: '#1f2937', color: '#fff' }));
+        .then(result => {
+            const isSuccess = result.toLowerCase().includes('success');
+            Swal.fire({ 
+                icon: isSuccess ? 'success' : 'error', 
+                title: 'Status', 
+                text: result, 
+                background: '#1f2937', 
+                color: '#fff' 
+            }).then(() => {
+                if(isSuccess) {
+                    document.getElementById("currentPass").value = '';
+                    document.getElementById("newPass").value = '';
+                }
+            });
+        });
 }
 
 // ===== Update Registration Setting =====
