@@ -22,7 +22,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = sanitize_input($_POST['description']);
 
     if(!$product_id || empty($product_name) || empty($barcode) || $price < 0) {
-        header("Location: ../src/views/edit_product.php?id=" . $product_id . "&error=invalid_data");
+        header("Location: ../views/edit_product.php?id=" . $product_id . "&error=invalid_data");
         exit();
     }
 
@@ -38,7 +38,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     if($result_check->num_rows == 0) {
         $stmt_check->close();
         $conn->close();
-        header("Location: ../src/views/manage_products.php?error=unauthorized");
+        header("Location: ../views/manage_products.php?error=unauthorized");
         exit();
     }
     $stmt_check->close();
@@ -54,16 +54,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         log_activity($user_id, 'UPDATE_PRODUCT', "Updated product #$product_id ($product_name)", 'product', $product_id);
         $stmt_update->close();
         $conn->close();
-        header("Location: ../src/views/manage_products.php?status=updated");
+        header("Location: ../views/manage_products.php?status=updated");
         exit();
     } else {
         $stmt_update->close();
         $conn->close();
-        header("Location: ../src/views/edit_product.php?id=" . $product_id . "&error=update_failed");
+        header("Location: ../views/edit_product.php?id=" . $product_id . "&error=update_failed");
         exit();
     }
 } else {
-    header("Location: ../src/views/manage_products.php");
+    header("Location: ../views/manage_products.php");
     exit();
 }
 ?>
