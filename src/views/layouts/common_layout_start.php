@@ -24,6 +24,7 @@ if (
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prime Invoice - Smart Easy Modern</title> <!-- Title will be updated by JavaScript -->
+    <link rel="icon" type="image/png" href="../../logo.png">
     <meta name="csrf-token" content="<?php echo Csrf::generateToken(); ?>">
 
 
